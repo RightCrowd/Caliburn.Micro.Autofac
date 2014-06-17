@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows;
 using Autofac;
 
 namespace Caliburn.Micro.Autofac
@@ -11,7 +12,7 @@ namespace Caliburn.Micro.Autofac
   /// A strongly-typed version of Caliburn.Micro.Bootstrapper that specifies the type of root model to create for the application.
   /// </summary>
   /// <typeparam name="TRootViewModel">The type of root view model for the application.</typeparam>
-  public class AutofacBootstrapper<TRootViewModel> : Bootstrapper<TRootViewModel>
+  public class AutofacBootstrapper<TRootViewModel> : BootstrapperBase
   {
     #region Properties
     protected IContainer Container { get; private set; }
@@ -40,6 +41,16 @@ namespace Caliburn.Micro.Autofac
     /// </summary>
     public Func<IEventAggregator> CreateEventAggregator { get; set; }
     #endregion
+
+    public AutofacBootstrapper(bool useApplication = true) : base(useApplication)
+    {
+      Initialize();
+    }
+
+    protected override void OnStartup(object sender, StartupEventArgs e)
+    {
+      DisplayRootViewFor<TRootViewModel>();
+    }
 
     /// <summary>
     /// Do not override this method. This is where the IoC container is configured.
